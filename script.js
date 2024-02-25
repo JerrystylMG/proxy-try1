@@ -1,14 +1,28 @@
-import OpenAI from "openai";
+const { GPT } = require('@openai/gpt');
 
-const openai = new OpenAI();
+// Instantiate the GPT model
+const gpt = new GPT({
+  apiKey: 'your_openai_api_key', // replace with your actual OpenAI API key
+  model: 'text-davinci-003', // specify the model you want to use
+  temperature: 0.7,
+  maxTokens: 150
+});
 
-async function main() {
-  const completion = await openai.chat.completions.create({
-    messages: [{ role: "system", content: "You are a helpful assistant." }],
-    model: "gpt-3.5-turbo",
-  });
+// Example prompt
+const prompt = "Translate the following English text to French: 'Hello, how are you?'";
 
-  console.log(completion.choices[0]);
+// Generate response
+async function generateResponse(prompt) {
+  try {
+    // Get completion
+    const completion = await gpt.complete(prompt);
+
+    // Print the response
+    console.log(completion.choices[0].text);
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
 
-main();
+// Call the function to generate response
+generateResponse(prompt);
